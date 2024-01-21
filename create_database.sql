@@ -1,7 +1,8 @@
 CREATE TABLE Tournament (
     tournament_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    basho TEXT,          -- The name of the tournament
-    day INTEGER CHECK(day > 0),  -- The day of the tournament
+    basho TEXT,   -- The name of the tournament
+    tournament_start DATE,  -- The date the tournament started
+    tournament_end DATE, -- The date the tournament ended
 );
 
 CREATE TABLE Wrestler (
@@ -29,7 +30,7 @@ CREATE TABLE Bout (
 CREATE TABLE Match (
     match_id INTEGER PRIMARY KEY AUTOINCREMENT,
     tournament_id INTEGER,         -- Foreign key referencing Tournament table
-    day INTEGER CHECK(day > 0),    -- Day of the match
+    match_date DATE,               -- Day of the match
     wrestler1_id INTEGER,          -- Foreign key referencing Wrestler table for the first wrestler
     wrestler2_id INTEGER,          -- Foreign key referencing Wrestler table for the second wrestler
     bout_id INTEGER,               -- Foreign key referencing Bout table
@@ -51,4 +52,75 @@ CREATE TABLE MediaReference (
     date_published DATE,          -- Date when the media content was published
 
     FOREIGN KEY (wrestler_id) REFERENCES Wrestler(wrestler_id),
+);
+
+CREATE TABLE User (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE,        -- Unique username for each user
+    email TEXT UNIQUE,           -- Email address of the user
+    password_salt TEXT,          -- Salt used for password hashing
+    password_hash TEXT,          -- Hashed password for user authentication
+    join_date DATE,              -- Date when the user joined the app
+);
+
+CREATE TABLE UserPrediction (
+    prediction_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,             -- Foreign key referencing User table
+    match_id INTEGER,            -- Foreign key referencing Match table
+    predicted_winner INTEGER,    -- Foreign key referencing Wrestler table for predicted winner
+    prediction_date DATE,        -- Date when the prediction was made
+
+    FOREIGN KEY (user_id) REFERENCES User(user_id),
+    FOREIGN KEY (match_id) REFERENCES Match(match_id),
+    FOREIGN KEY (predicted_winner) REFERENCES Wrestler(wrestler_id),
+);
+
+CREATE TABLE UserStats (
+    user_stats_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,             -- Foreign key referencing User table
+    total_points INTEGER,        -- Total points earned by the user in predictions
+    total_wins INTEGER,          -- Total number of correct predictions
+    total_losses INTEGER,        -- Total number of incorrect predictions
+
+    FOREIGN KEY (user_id) REFERENCES User(user_id),
+);
+
+CREATE TABLE Discussion (
+    discussion_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,             -- Foreign key referencing User table
+    title TEXT,                  -- Title of the discussion thread
+    content TEXT,                -- Content of the discussion post
+    post_date DATE,              -- Date when the discussion post was made
+
+    FOREIGN KEY (user_id) REFERENCES User(user_id),
+);
+
+CREATE TABLE UserConnection (
+    connection_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user1_id INTEGER,            -- Foreign key referencing User table for the first user
+    user2_id INTEGER,            -- Foreign key referencing User table for the second user
+    connection_date DATE,        -- Date when the connection was established
+
+    FOREIGN KEY (user1_id) REFERENCES User(user_id),
+    FOREIGN KEY (user2_id) REFERENCES User(user_id),
+);
+
+CREATE TABLE Leaderboard (
+    leaderboard_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,             -- Foreign key referencing User table
+    total_points INTEGER,        -- Total points earned by the user
+    rank INTEGER,                -- Rank of the user in the leaderboard
+
+    FOREIGN KEY (user_id) REFERENCES User(user_id),
+);
+
+CREATE TABLE UserMediaContribution (
+    contribution_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,             -- Foreign key referencing User table
+    media_id INTEGER,            -- Foreign key referencing MediaReference table
+    contribution_text TEXT,      -- User's contribution or comment on the media content
+    contribution_date DATE,      -- Date when the contribution was made
+
+    FOREIGN KEY (user_id) REFERENCES User(user_id),
+    FOREIGN KEY (media_id) REFERENCES MediaReference(media_id),
 );
