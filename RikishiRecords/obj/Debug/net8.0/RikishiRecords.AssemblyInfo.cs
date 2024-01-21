@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RikishiRecords")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+465926132162d57baffddea926db9691ae286272")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e0ce17a7965f337de52973fa8a34c7e4598ff27")]
 [assembly: System.Reflection.AssemblyProductAttribute("RikishiRecords")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RikishiRecords")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
