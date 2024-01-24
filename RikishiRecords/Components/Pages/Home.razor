@@ -1,7 +1,20 @@
 ﻿@page "/"
+@inherits LayoutComponentBase
 
-<PageTitle>Home</PageTitle>
+@using RikishiRecords.Components.Data
 
-<h1>Hello, world!</h1>
+<div class="container">
+    <h1>Welcome to Sumo Pokedex</h1>
+    <p>Explore the world of Sumo wrestling and discover powerful Sumo wrestlers!</p>
 
-Welcome to your new app.
+    <div class="sumo-list">
+        <!-- Display a list of Sumo wrestlers with their names and images -->
+        @foreach (var sumo in SumoData.GetSumoList())
+        {
+            <div class="sumo-card">
+                <h3>@sumo.Name</h3>
+                <img src="@sumo.ImageUrl" alt="@sumo.Name"/>
+            </div>
+        }
+    </div>
+</div>
